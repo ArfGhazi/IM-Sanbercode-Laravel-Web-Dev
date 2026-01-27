@@ -1,0 +1,8 @@
+git add .
+git commit -m "commit pertama : Mengisi data peserta Arfa Ghazi"
+git push origin main
+
+git add .
+git commit -m "commit pertama : Mengisi data peserta Arfa Ghazi"
+git push origin main
+
