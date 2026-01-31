@@ -1,0 +1,62 @@
+1. CREATE DATABASE
+CREATE DATABASE myshop;
+
+2. Create Table
+-users
+create table users( id integer PRIMARY KEY AUTO_INCREMENT, name varchar(255) not null, email varchar(255) not null, passowrd varchar(255) not null );
+
+-categories
+create table categories ( id integer PRIMARY KEY AUTO INCREMENT, name varchar(255) not null );
+
+-items
+create table items ( id integer PRIMARY KEY AUTO_INCREMENT, name varchar(255) not null, description varchar(255) not null, price integer not null, stocks integer not null, categoriy_id integer not null, FOREIGN KEY(category_id) REFERENCES categories(id) );
+
+3. insert data
+-users
+INSERT INTO users(name, email, password) VALUES("John Doe", "john@doe.com", "john123");
+
+INSERT INTO users(name, email, password) VALUES("Jane Doe", "jane@doe.com", "jenita123");
+
+-categories
+INSERT INTO categories(name) VALUES("gadget"), ("cloth"), ("men"), ("women"), ("branded")
+
+-items
+INSERT INTO items(name, description, price, stock, category_id) VALUES("Sumsang b50", "hape keren dari merek sumsang", 4000000, 100, 1);
+
+INSERT INTO items(name, description, price, stock, category_id) VALUES("Uniklooh", "baju keren dari brand ternama", 500000, 50, 2);
+
+INSERT INTO items(name, description, price, stock, category_id) VALUES("IMHO Watch", "jam tangan anak yang jujur banget", 2000000, 10, 1);
+
+4. Mengambil data
+- data users
+SELECT id, name, email FROM users;
+
+-data items
+SELECT * FROM items WHERE price > 1000000;
+
+SELECT * FROM items WHERE name LIKE '%watch%';
+
+-data items category
+SELECT 
+  items.name,
+  items.description,
+  items.price,
+  items.stock,
+  items.category_id,
+  categories.name AS kategori
+FROM items
+JOIN categories
+ON items.category_id = categories.id;
+
+5. mengubah data
+SELECT name, price FROM items;
+
+UPDATE items
+SET price = 2500000
+WHERE name = 'Sumsang b50';
+
+SELECT name, price
+FROM items
+WHERE name = 'Sumsang b50';
+
+
