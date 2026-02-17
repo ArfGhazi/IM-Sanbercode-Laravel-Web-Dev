@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title')</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="{{ asset('template/css/styles.min.css') }}">
 </head>
 
@@ -35,7 +34,7 @@
         <ul id="sidebarnav">
 
           <li class="nav-small-cap">
-            <span class="hide-menu">Home</span>
+            <span class="hide-menu">Dashboard</span>
           </li>
 
           <li class="sidebar-item">
@@ -44,17 +43,68 @@
             </a>
           </li>
 
+
+          @auth
+
+          {{-- ADMIN MENU --}}
+          @if(auth()->user()->isAdmin())
+
+          <li class="nav-small-cap">
+            <span class="hide-menu">ADMIN</span>
+          </li>
+
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ url('/register') }}">
-              Form Input
+            <a class="sidebar-link" href="{{ url('/categories') }}">
+              Category
             </a>
           </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('/products') }}">
+              Product
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('/transactions') }}">
+              Transaction
+            </a>
+          </li>
+
+          @endif
+
+
+          {{-- STAFF MENU --}}
+          @if(auth()->user()->isStaff())
+
+          <li class="nav-small-cap">
+            <span class="hide-menu">STAFF</span>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('/staff/products') }}">
+              Product
+            </a>
+          </li>
+
+          @endif
+
+
+          {{-- PROFILE --}}
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ url('/profile') }}">
+              Profile
+            </a>
+          </li>
+
+          @endauth
 
         </ul>
       </nav>
 
     </div>
   </aside>
+
 
   <!-- Main Wrapper -->
   <div class="body-wrapper">
@@ -63,16 +113,19 @@
     <header class="app-header">
       <nav class="navbar navbar-expand-lg navbar-light">
 
-        <ul class="navbar-nav">
-          <li class="nav-item d-block d-xl-none">
-            <a class="nav-link sidebartoggler" href="javascript:void(0)">
-              ☰
-            </a>
-          </li>
-        </ul>
-
         <div class="navbar-collapse justify-content-end">
-          <span class="me-3">SEO Dash Laravel</span>
+
+          @auth
+          <span class="me-3">
+            {{ auth()->user()->name }}
+          </span>
+
+          <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button class="btn btn-danger btn-sm">Logout</button>
+          </form>
+          @endauth
+
         </div>
 
       </nav>
@@ -86,7 +139,7 @@
   </div>
 </div>
 
-<!-- JS -->
+
 <script src="{{ asset('template/libs/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ asset('template/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('template/libs/simplebar/dist/simplebar.js') }}"></script>

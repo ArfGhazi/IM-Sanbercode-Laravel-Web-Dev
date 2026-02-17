@@ -1,92 +1,37 @@
-@extends('layout.master')
-
-@section('title','Register')
+@extends('layouts.app')
 
 @section('content')
 
-<div class="card">
-  <div class="card-body">
+<div class="card p-4">
+<h3>Register Form</h3>
 
-    <h4 class="card-title mb-4">Register</h4>
+<form action="{{ route('form.welcome') }}" method="POST">
+@csrf
 
-    <form action="/welcome" method="POST">
-      @csrf
+<input class="form-control mb-2" type="text" name="first_name" placeholder="First Name">
+<input class="form-control mb-2" type="text" name="last_name" placeholder="Last Name">
 
-      <!-- First Name -->
-      <div class="mb-3">
-        <label class="form-label">First name:</label>
-        <input type="text" name="first_name" class="form-control" required>
-      </div>
+<label>Gender</label><br>
+<input type="radio" name="gender" value="Male"> Male
+<input type="radio" name="gender" value="Female"> Female
+<br><br>
 
-      <!-- Last Name -->
-      <div class="mb-3">
-        <label class="form-label">Last name:</label>
-        <input type="text" name="last_name" class="form-control" required>
-      </div>
+<select class="form-control mb-2" name="nationality">
+<option>Indonesia</option>
+<option>Malaysia</option>
+<option>Singapore</option>
+</select>
 
-      <!-- Gender -->
-      <div class="mb-3">
-        <label class="form-label d-block">Gender:</label>
+<label>Language</label><br>
+<input type="checkbox" name="language[]" value="Indonesia"> Indonesia
+<input type="checkbox" name="language[]" value="English"> English
+<br><br>
 
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" value="Male">
-          <label class="form-check-label">Male</label>
-        </div>
+<textarea class="form-control mb-2" name="bio"></textarea>
 
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" value="Female">
-          <label class="form-check-label">Female</label>
-        </div>
+<button class="btn btn-primary">Submit</button>
 
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="gender" value="Other">
-          <label class="form-check-label">Other</label>
-        </div>
-      </div>
-
-      <!-- Nationality -->
-      <div class="mb-3">
-        <label class="form-label">Nationality:</label>
-        <select name="nationality" class="form-select">
-          <option value="Indonesian">Indonesian</option>
-          <option value="Singaporean">Singaporean</option>
-          <option value="Malaysian">Malaysian</option>
-        </select>
-      </div>
-
-      <!-- Language -->
-      <div class="mb-3">
-        <label class="form-label d-block">Language Spoken:</label>
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="language[]" value="Bahasa Indonesia">
-          <label class="form-check-label">Bahasa Indonesia</label>
-        </div>
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="language[]" value="English">
-          <label class="form-check-label">English</label>
-        </div>
-
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="language[]" value="Other">
-          <label class="form-check-label">Other</label>
-        </div>
-      </div>
-
-      <!-- Bio -->
-      <div class="mb-4">
-        <label class="form-label">Bio:</label>
-        <textarea name="bio" rows="4" class="form-control"></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-primary">
-        Submit
-      </button>
-
-    </form>
-
-  </div>
+</form>
 </div>
 
 @endsection

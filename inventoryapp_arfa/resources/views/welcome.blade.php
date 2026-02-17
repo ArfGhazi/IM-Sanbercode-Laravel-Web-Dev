@@ -1,20 +1,16 @@
-@extends('layout.master')
-
-@section('title','Welcome')
+@extends('layouts.app')
 
 @section('content')
 
-<div class="card">
-  <div class="card-body">
+<div class="card p-4">
 
-    <h3>Welcome {{ $first_name }} {{ $last_name }}</h3>
+<h3>Welcome {{ $first_name }} {{ $last_name }}</h3>
 
-    <p><strong>Gender:</strong> {{ $gender }}</p>
-    <p><strong>Nationality:</strong> {{ $nationality }}</p>
-    <p><strong>Language:</strong> {{ implode(', ', $language ?? []) }}</p>
-    <p><strong>Bio:</strong> {{ $bio }}</p>
+<p>Gender : {{ $gender ?: '-' }}</p>
+<p>Nationality : {{ $nationality ?: '-' }}</p>
+<p>Language : {{ count($language) ? implode(', ', $language) : '-' }}</p>
+<p>Bio : {{ $bio ?: '-' }}</p>
 
-  </div>
 </div>
 
 @endsection
