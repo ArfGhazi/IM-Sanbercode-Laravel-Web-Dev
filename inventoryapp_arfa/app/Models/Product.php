@@ -13,7 +13,7 @@ protected $fillable = [
     'price',
     'stock',
     'image',
-    'description',  // ← tambahkan ini
+    'description',  // pastikan ada ini
 ];
 
 protected $casts = [

@@ -38,40 +38,57 @@ class TransactionController extends Controller implements HasMiddleware
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'amount'     => 'required|integer|min:1',
-            'type'       => 'required|in:in,out',
-            'notes'      => 'nullable|string|max:500',
-        ]);
+{
+    // Validasi ketat
+    $validated = $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'amount'     => 'required|integer|min:1',
+        'type'       => 'required|in:in,out',
+        'notes'      => 'nullable|string|max:500',
+    ]);
 
-        $product = Product::findOrFail($request->product_id);
+    // Cek user login
+    if (!auth()->check()) {
+        return back()->withErrors(['auth' => 'Anda harus login untuk membuat transaksi'])->withInput();
+    }
 
-        if ($request->type === 'out' && $request->amount > $product->stock) {
-            return back()->withErrors(['amount' => 'Stok tidak mencukupi untuk transaksi keluar'])->withInput();
-        }
+    $product = Product::findOrFail($validated['product_id']);
 
-        // Gunakan transaction DB biar aman (stok & record transaksi konsisten)
-        DB::transaction(function () use ($request, $product) {
+    // Cek stok kalau keluar
+    if ($validated['type'] === 'out' && $validated['amount'] > $product->stock) {
+        return back()->withErrors(['amount' => 'Stok tidak mencukupi! Stok saat ini: ' . $product->stock])->withInput();
+    }
+
+    try {
+        \DB::transaction(function () use ($validated, $product) {
             Transaction::create([
-                'product_id' => $request->product_id,
+                'product_id' => $validated['product_id'],
                 'user_id'    => auth()->id(),
-                'type'       => $request->type,
-                'amount'     => $request->amount,
-                'notes'      => $request->notes,
+                'type'       => $validated['type'],
+                'amount'     => $validated['amount'],
+                'notes'      => $validated['notes'] ?? null,
             ]);
 
-            if ($request->type === 'in') {
-                $product->increment('stock', $request->amount);
+            if ($validated['type'] === 'in') {
+                $product->increment('stock', $validated['amount']);
             } else {
-                $product->decrement('stock', $request->amount);
+                $product->decrement('stock', $validated['amount']);
             }
         });
 
         return redirect()->route('transactions.index')
             ->with('success', 'Transaksi berhasil disimpan!');
+    } catch (\Exception $e) {
+        // Log error biar bisa dicek
+        \Log::error('Transaction store error: ' . $e->getMessage(), [
+            'request' => $request->all(),
+            'trace'   => $e->getTraceAsString(),
+        ]);
+
+        return back()->withErrors(['error' => 'Gagal menyimpan transaksi: ' . $e->getMessage()])
+                     ->withInput();
     }
+}
 
     public function show($id)
     {

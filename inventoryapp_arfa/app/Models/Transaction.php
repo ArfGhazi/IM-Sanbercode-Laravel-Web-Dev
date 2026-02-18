@@ -11,7 +11,7 @@ class Transaction extends Model
         'user_id',
         'type',
         'amount',
-        'notes'
+        'notes',
     ];
 
     public function product()
